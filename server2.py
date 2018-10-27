@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib import animation
 from collections import deque
 import socket
 import json
@@ -23,7 +24,7 @@ def log_data(label, value):
             data[label] = deque('', max_data_size)
             new_line, = ax.plot([], [], label=label)
             lines[label] = new_line
-            plot.legend()
+            plt.legend()
         data[label].append(value)
     finally:
         data_lock.release()
@@ -59,3 +60,4 @@ try:
                 conn.send('#ACK#'.encode())
 except:
     print('Exception:', sys.exc_info()[0], '-', sys.exc_info()[1])
+
