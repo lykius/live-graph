@@ -4,7 +4,8 @@ from collections import deque
 import socket
 import json
 import sys
-from multiprocessing import Lock
+from multiprocessing import Lock, Process
+from pprint import pprint
 
 HOST = ''
 PORT = 12345
@@ -13,35 +14,46 @@ data = {}
 max_data_size = 100
 data_lock = Lock()
 
-lines = {}
-fig = plt.figure()
-ax = plt.axes(xlim=(0, 100), ylim=(0, 40))
-
 def log_data(label, value):
     data_lock.acquire()
+    print('log_data')
+    pprint(data)
     try:
         if label not in data.keys():
             data[label] = deque('', max_data_size)
-            new_line, = ax.plot([], [], label=label)
-            lines[label] = new_line
-            plt.legend()
         data[label].append(value)
     finally:
         data_lock.release()
 
 x = [n for n in range(0, 101)]
+lines = {}
+fig = plt.figure()
+ax = plt.axes(xlim=(0, 100), ylim=(0, 40))
 
 def animate(i):
     data_lock.acquire()
+    print('animate')
+    pprint(lines)
+    pprint(data)
     try:
         for label in data.keys():
-            lines[label].set_data(x, data[label])
+            if label not in lines.keys():
+                new_line, = ax.plot(x, data[label], label=label)
+                lines[label] = new_line
+                plt.legend()
+            else:
+                lines[label].set_data(x, data[label])
     finally:
         data_lock.release()
     return lines.values()
 
-anim = animation.FuncAnimation(fig, animate, interval=100, blit=True)
-plt.show(block=False)
+anim = animation.FuncAnimation(fig, animate, interval=1000, blit=True)
+
+def proc():
+    plt.show()
+
+p = Process(target=proc)
+p.start()
 
 try:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
