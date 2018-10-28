@@ -24,7 +24,6 @@ try:
                 json_msg = json.dumps(msg)
                 s.send(json_msg.encode())
                 ack = s.recv(1024)
-                sleep(1)
 except:
     print('Exception:', sys.exc_info()[0], '-', sys.exc_info()[1])
 
