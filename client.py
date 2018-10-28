@@ -4,8 +4,9 @@ import json
 import sys
 import random
 
-SERVER_HOST = '127.0.0.1'
-SERVER_PORT = 12345
+SERVER_HOST         = '127.0.0.1'
+SERVER_PORT         = 12345
+SOCKET_BUFFER_SIZE  = 1024
 
 data = {}
 data['data1'] = 5
@@ -25,7 +26,7 @@ try:
                 msg = {'label': label, 'value': data[label] + (random.random() * 6 - 3)}
                 json_msg = json.dumps(msg)
                 s.send(json_msg.encode())
-                ack = s.recv(1024)
+                ack = s.recv(SOCKET_BUFFER_SIZE)
 except:
     print('Exception:', sys.exc_info()[0], '-', sys.exc_info()[1])
 
