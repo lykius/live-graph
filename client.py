@@ -8,9 +8,11 @@ SERVER_HOST = '127.0.0.1'
 SERVER_PORT = 12345
 
 data = {}
-data['data1'] = 10
-data['data2'] = 20
-data['data3'] = 30
+data['data1'] = 5
+data['data2'] = 10
+data['data3'] = 15
+data['data4'] = 20
+data['data5'] = 25
 
 try:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -19,7 +21,7 @@ try:
         s.connect((SERVER_HOST, SERVER_PORT))
         print('Connected')
         while True:
-            for label in data.keys():
+            for label in data:
                 msg = {'label': label, 'value': data[label] + (random.random() * 6 - 3)}
                 json_msg = json.dumps(msg)
                 s.send(json_msg.encode())
