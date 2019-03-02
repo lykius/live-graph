@@ -1,5 +1,4 @@
 import socket
-from time import sleep
 import json
 import sys
 import random
@@ -26,7 +25,7 @@ try:
                 msg = {
                     'label': label,
                     'value': data[label] + (random.random() * 6 - 3)
-                    }
+                }
                 json_msg = json.dumps(msg)
                 s.send(json_msg.encode())
                 ack = s.recv(SOCKET_BUFFER_SIZE)

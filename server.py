@@ -25,10 +25,8 @@ def data_server():
         msg = json.loads(json_msg.decode())
         label, value = msg['label'], msg['value']
         if label not in data:
-            data[label] = deque(
-                [0 for _ in range(MAX_DEQUE_SIZE)],
-                MAX_DEQUE_SIZE
-                )
+            data[label] = deque([0 for _ in range(MAX_DEQUE_SIZE)],
+                                MAX_DEQUE_SIZE)
         data[label].append(value)
         client_connection.send('#ACK#'.encode())
         yield data
@@ -60,13 +58,11 @@ try:
         client_connection, client_addr = server_socket.accept()
         print('Accepted connection from', client_addr)
         with client_connection:
-            anim = animation.FuncAnimation(
-                fig,
-                animate,
-                data_server,
-                interval=REFRESH_PERIOD,
-                blit=True
-                )
+            anim = animation.FuncAnimation(fig,
+                                           animate,
+                                           data_server,
+                                           interval=REFRESH_PERIOD,
+                                           blit=True)
             plt.show()
 except:
     print('Exception:', sys.exc_info()[0], '-', sys.exc_info()[1])
